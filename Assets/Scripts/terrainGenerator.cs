@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class terrainGenerator : MonoBehaviour {
 
+    //detail and height restrictions on Midpoint Bisection method
     [Range(0.1f, 5f)]
     public float heightScale = 3.0f; //a higher heightScale results in less height variance
     [Range(0.1f, 5f)]
     public float detailScale = 3.0f; //a higher detailScale results in less detail variance
+
+    //vertex translation parents
     public GameObject empty;
     private GameObject temp;
+
+    //plane components
     private Mesh slope; //used to update the mesh renderer
-    private Vector3[] vertices; //list of 121 vertices on the plane
+    private Vector3[] vertices; //array of 121 vertices on the plane
     
 
     void Start()
@@ -26,9 +31,9 @@ public class terrainGenerator : MonoBehaviour {
     void adjustVertices()
     {
         /*
-            the reason i need to do this is because when the planes are rotated, its vertices aren't taken with it (i.e. it remains as a representation of a flat surface in a 3D sense)
-            I run midpoint bisection and adjust the location of these after (the meshes update properly)
-            I end up using these vertices for collision detection later, so that's why its necessary
+            when the planes are rotated, its vertices aren't taken with it (i.e. it remains as a representation of a flat surface in a 3D sense)
+            run midpoint bisection and adjust the location of these after (the meshes update properly)
+            use updated vertices for collision
         */
         //create empty at 000, move relevant vertices inside, rotate and transform to this.rotate/transform
         empty = Instantiate(Resources.Load("Empty") as GameObject); //used to maintain global position coordinates
@@ -85,7 +90,7 @@ public class terrainGenerator : MonoBehaviour {
         
     }
     
-    void MidpointBisection(Vector3[] relevantVertices, int start, int stop)
+    void MidpointBisection(Vector3[] relevantVertices, int start, int stop) //recursively generated natural looking mountain surface
     {
         int midpoint = (stop + start) / 2;
         if (midpoint != start && midpoint != stop)

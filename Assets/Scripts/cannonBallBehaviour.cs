@@ -4,22 +4,31 @@ using UnityEngine;
 
 public class cannonBallBehaviour : MonoBehaviour {
 
-    public float gravity = -0.4f;
-    public float airResistanceX = 0.1f;
-    public float airResistanceY = 0.1f;
+    //kinematic motion
     public float velX;
     public float velY;
     public float initialVelocity = 15f;
     public float restitution = 0.5f;
+
+    //firing angle
     int angle;
+
+    //starting positions
     float posX = 2.496f;
     float posY = 2.075f;
+
+    //forces
+    public float gravity = -0.4f;
+    public float airResistanceX = 0.1f;
+    public float airResistanceY = 0.1f;
     float nextPosX;
     float nextPosY;
     public Vector2 nextPos;
     float windSpeed;
     windBehaviour wind;
     float lerp = 0.005f;
+
+    //collision handling
     bool updateOff = false;
     float bounceCoeff = 1.2f;
     bool windOff = false;
@@ -48,10 +57,12 @@ public class cannonBallBehaviour : MonoBehaviour {
         }
 
         nextPos = new Vector2(nextPosX, nextPosY);
-        if (!updateOff)
+
+        if (!updateOff) //handles motion until collision
         {
             move();
         }
+
         posX = nextPosX;
         posY = nextPosY;
 
@@ -72,10 +83,7 @@ public class cannonBallBehaviour : MonoBehaviour {
 
     void destroyIn()
     {
-        if (true)//posX == nextPosX && posY == nextPosY) //TODO: FIX WEIRDNESS
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
     
     public void bounce(Vector3 A, Vector3 B, int i)
@@ -90,19 +98,19 @@ public class cannonBallBehaviour : MonoBehaviour {
         //figure out where we hit and adjust the x velocity considering bounce and restitution accordingly
         if (i >= 22 && i <= 33 && velX > 0)
         {
-            Debug.Log("HIT TOP");
+            //Debug.Log("HIT TOP");
             top = true;
             velX += -AB.y * restitution + velX * 4 * bounceCoeff;
         }
         else if (i >= 0 && i <= 21 && velX > 0)
         {
-            Debug.Log("HIT LEFT");
+            //Debug.Log("HIT LEFT");
             velX = -AB.y * restitution;
             
         }
         else
         {
-            Debug.Log("HIT RIGHT");
+            //Debug.Log("HIT RIGHT");
             velX = -AB.y * restitution;
         }
 

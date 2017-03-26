@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class collision : MonoBehaviour {
-
-    //Vector3[] ballVertices;
+    
     Vector3[] mountain;
     float r = 0.75f;
     public float tolerance = 0;
     cannonBallBehaviour cBB;
     GameObject[] goats;
+
 	// Use this for initialization
 	void Start () {
-        //updateBallVertices();
         cBB = gameObject.GetComponent<cannonBallBehaviour>();
         mountain = GameObject.FindGameObjectWithTag("mountain").GetComponent<mountainVertices>().getMountain();
         goats = GameObject.FindGameObjectsWithTag("goat");
@@ -20,14 +19,11 @@ public class collision : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (checkIntersections())
-        {
-            Debug.Log("WE GOTTA BOUNCE");
-        }
+        checkIntersections();
         checkGoat();
     }
 
-    void checkGoat() //goat collision
+    void checkGoat() //goat collision (Verlet physics)
     {
         foreach(GameObject g in goats) //find all goats
         {
@@ -44,10 +40,9 @@ public class collision : MonoBehaviour {
         }
     }
 
-    public bool checkIntersections()
+    public bool checkIntersections() //cannonball collision (Kinematic motion)
     {
-        //updateBallVertices();
-        //this attempts to use 8 fake vertices on the ball and tests for line intersections with lines between adjacent mountain vertices (doesn't work at all though)
+        //this attempts to use 8 fake vertices on the ball and tests for line intersections with lines between adjacent mountain vertices (deprecated; following behaviour looks nicer)
         /*if (transform.position.x >= 9.6f)
         {
             for (int i = 0; i < 8; i++) //check each line on the ball
@@ -120,8 +115,7 @@ public class collision : MonoBehaviour {
         return false;
     }
     
-    //stuff that i tried but didn't work, including point to line distance, and line intersection + some linear algebra
-
+    //DEPRECATED (see note above)
     /*float distanceToLineSegment(Vector3 A, Vector3 B, Vector3 P)
     {
         Vector3 AP = P - A;       //Vector from A to P   
